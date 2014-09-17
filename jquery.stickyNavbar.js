@@ -1,5 +1,5 @@
 /*
- * stickyNavbar.js v1.1.2
+ * stickyNavbar.js v1.1.1
  * https://github.com/jbutko/stickyNavbar.js
  * Fancy sticky navigation jQuery plugin with smart anchor links highlighting
  *
@@ -17,7 +17,7 @@
  *
  * COPYRIGHT (C) 2014 Jozef Butko
  * https://github.com/jbutko
- * LAST UPDATE: 25/08/2014
+ * LAST UPDATE: 23/07/2014
  *
  */
 /* The semi-colon before function invocation is a safety net against concatenated
@@ -59,8 +59,8 @@
                 $selfZindex = $self.css("zIndex"), // Z-index of this
                 $selfScrollTop = $self.offset().top, // scrollTop position of this
                 $topOffset = $self.css("top") === 'auto' ? 0 : $self.css("top"), // Top property of this: if not set = 0
-                menuItems = options.selector === "a" ? $self.find('li a') : $self.find('li'), // Navigation lists or links
-                menuItemsHref = $self.find('li a[href*=#]'), // href attributes of navigation links
+                menuItems = options.selector === "a" ? $self.find('nav ul li a') : $self.find('nav ul li'), // Navigation lists or links
+                menuItemsHref = $self.find('nav ul li a[href*=#]'), // href attributes of navigation links
                 thisHeight = $self.outerHeight(true); // Height of navigation wrapper
 
             /* Smooth scrolling to the desired section: get clicked href attribute, measure offset from top and then animate  */
@@ -69,16 +69,10 @@
             var clicks = 0;
 
             /* Smooth scrolling logic */
-            menuItems.click(function(e) {
-                /* v1.1.2: Ignore external links and just let them open - pull request #15 by Globegitter */
-                var href = $(this).attr("href");
-                if (href.substring(0, 4) === 'http' || href.substring(0, 7) === 'mailto:') {
-                    return true;
-                }
-
+            menuItems.click(function (e) {
                 /* Get index of clicked nav link */
                 var index = menuItems.index(this),
-                    section = href; // Get href attr of clicked nav link
+                    section = $(this).attr("href"); // Get href attr of clicked nav link
 
                 /* On every nav link click increment counter */
                 ++clicks;
@@ -98,42 +92,30 @@
 
                     $("html, body").stop().animate({
                         scrollTop: $(section).offset().top - thisHeight + 2 + 'px'
-                    }, {
-                        duration: options.animDuration,
-                        easing: options.easing
-                    });
+                    }, {duration: options.animDuration, easing: options.easing});
 
-                    /* v1.0.3: Overlapping fix */
-                    /* If it is first click after page load or we are at the top of the page or user return back on home: Then add 'this' height 2 times to fix overlapping */
+                /* v1.0.3: Overlapping fix */
+                /* If it is first click after page load or we are at the top of the page or user return back on home: Then add 'this' height 2 times to fix overlapping */
                 } else if (clicks === 1 || $self.offset().top === $selfScrollTop || index === 0) {
 
                     $("html, body").stop().animate({
-                        scrollTop: $(section).offset().top - 2 * thisHeight + 2 + 'px'
-                    }, {
-                        duration: options.animDuration,
-                        easing: options.easing
-                    });
+                        scrollTop: $(section).offset().top - thisHeight + 2 + 'px'
+                    }, {duration: options.animDuration, easing: options.easing});
 
-                    /* v1.0.5: Inaccurate scrolling fix */
-                    /* If it is second click and we are scrolling upwards then add 'this' height just once */
+                /* v1.0.5: Inaccurate scrolling fix */
+                /* If it is second click and we are scrolling upwards then add 'this' height just once */
                 } else if (clicks === 2 && ($self.offset().top < $selfScrollTop)) {
 
                     $("html, body").stop().animate({
                         scrollTop: $(section).offset().top + 2 + 'px'
-                    }, {
-                        duration: options.animDuration,
-                        easing: options.easing
-                    });
+                    }, {duration: options.animDuration, easing: options.easing});
 
-                    /* Else add 'this' height just once */
+                /* Else add 'this' height just once */
                 } else {
 
                     $("html, body").stop().animate({
                         scrollTop: $(section).offset().top - thisHeight + 2 + 'px'
-                    }, {
-                        duration: options.animDuration,
-                        easing: options.easing
-                    });
+                    }, {duration: options.animDuration, easing: options.easing});
 
                 } // Smooth scrolling logic End
 
@@ -234,7 +216,7 @@
                     /* v1.1.0: Removed bottomAnimation */
 
                     /* Remove activeClass from menuItem before the last and add activeClass to the lastests one */
-                    menuItems.removeClass(options.activeClass).last().addClass(options.activeClass);
+                    // menuItems.removeClass(options.activeClass).last().addClass(options.activeClass);
 
                 }
 
